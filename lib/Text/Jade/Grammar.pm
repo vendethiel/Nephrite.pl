@@ -1,10 +1,26 @@
 grammar Text::Jade::Grammar;
 
-token TOP {
-	^^ $$
+token line {
+	<selector> <value>
+	| '|' <text>
 }
 
-rule ident { :i
+regex code {
+	<-[\n]>
+}
+
+regex text {
+	<-[\n]>
+	# todo interpolation ...
+}
+
+rule value:sym<=> {
+	'=' <code>
+}
+
+rule value:sym<|> { <text> }
+
+token ident { :i
 	<[a..z _ -]>
 }
 
@@ -26,19 +42,16 @@ token quoted-string:sym<''> {
 	<-[']>
 }
 
-token filters {
-	'[' ~ ']'
-	<.ident> '='
-	$<val>=[
-	| <.quoted-string>
-	| <.ident>
-	]
+token attributes:sym<()> {
+}
+
+token attributes:sym<{}> {
 }
 
 token selector {
 	[
 		<id> ?
 		<classes> *
-		<filters> *
-	] * % <.ws>
+		<attributes> *
+	]
 }
