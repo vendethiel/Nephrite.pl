@@ -7,6 +7,7 @@ token line {
 
 regex code {
 	<-[\n]>
+	# add quoted string here and such
 }
 
 regex text {
@@ -14,22 +15,29 @@ regex text {
 	# todo interpolation ...
 }
 
+regex interpolation {
+	'#{' ~ '}'
+	.+?
+}
+
 rule value:sym<=> {
 	'=' <code>
 }
 
-rule value:sym<|> { <text> }
+rule value:sym<|> {
+	<text>
+}
 
 token ident { :i
 	<[a..z _ -]>
 }
 
 token id {
-	'#' <.ident>
+	'#' <ident>
 }
 
 token class {
-	'.' <.ident>
+	'.' <ident>
 }
 
 token quoted-string:sym<"> {
@@ -37,21 +45,29 @@ token quoted-string:sym<"> {
 	<-["]>
 }
 
-token quoted-string:sym<''> {
+token quoted-string:sym<'> {
 	'"' ~ '"'
 	<-[']>
 }
 
+# Selector
+token selector {
+	$<tag>=<ident> ? # defaults to `div` # TODO also needs interpolation
+	<id> ?
+	<classes> *
+	<attributes> *
+}
+
+# Attributes
 token attributes:sym<()> {
+	'(' ~ ')'
+	<ident> '=' <code>
 }
 
 token attributes:sym<{}> {
-}
-
-token selector {
+	'{' ~ '}'
 	[
-		<id> ?
-		<classes> *
-		<attributes> *
-	]
+	| <ident> ':' <code>
+	| ':' <ident> <.ws> '=>' <.ws> <code> # does "code" support arrays ? if it's embeddable p6, it'll
+	] *
 }

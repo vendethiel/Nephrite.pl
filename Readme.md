@@ -9,3 +9,10 @@ Perl 6 implementation of Jade.
 ```perl6
 
 ```
+
+### Example
+
+```jade
+#root
+  | Hey !
+```
