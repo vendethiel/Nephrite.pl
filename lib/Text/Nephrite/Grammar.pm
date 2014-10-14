@@ -10,13 +10,13 @@ token TOP {
   <lines>
 }
 
-regex lines($indent = 0) {
+token lines($indent = 0) {
   <line($indent)> +
 }
 
 # can't proto+arg
 #proto token line(Int) { * }
-regex line(Int $indent) {
+token line(Int $indent) {
   <line-empty> | <line-full($indent)>
 }
 
