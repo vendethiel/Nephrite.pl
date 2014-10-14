@@ -1,7 +1,7 @@
 module Text::Nephrite;
 
 use Text::Nephrite::Grammar;
-#use Text::Nephrite::Actions;
+use Text::Nephrite::Actions;
 
 sub parse(Str $txt) is export {
   # --> :(Hash[Str, Str] --> Str)) is export {
