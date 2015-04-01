@@ -7,7 +7,7 @@ my class X::Indent::TooMuch is Exception {
 constant TABSTOP = 2;
 
 token TOP {
-  <lines>
+  <lines> ?
 }
 
 token lines($indent = 0) {
